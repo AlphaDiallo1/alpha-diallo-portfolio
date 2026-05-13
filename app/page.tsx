@@ -30,13 +30,13 @@ const skills = [
 
 const projects = [
   {
-    title: "Flashcard-O-Matic",
+    title: "X42",
     description:
-      "An interactive study application for creating decks, reviewing cards, flipping answers, and managing learning content through a responsive React interface.",
-    technologies: ["React.js", "JavaScript", "HTML", "CSS"],
-    imageUrl: "/images/flashcard-app.png",
-    githubUrl: "https://github.com/AlphaDiallo1/FlashCardApp",
-    liveUrl: "https://flashcard-app-alpha.vercel.app",
+      "A futuristic 3D armor configurator where users can rotate a cinematic robot suit, customize armor colors, toggle upgrades, review live stats, and save builds in a responsive lab interface.",
+    technologies: ["Next.js", "TypeScript", "Three.js", "React Three Fiber", "Tailwind CSS"],
+    imageUrl: "",
+    githubUrl: "https://github.com/AlphaDiallo1/X42",
+    liveUrl: "https://x42.vercel.app/",
   },
   {
     title: "Recipe Tracking App",
