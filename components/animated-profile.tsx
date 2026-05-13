@@ -102,7 +102,7 @@ export default function AnimatedProfile({ imageUrl, alt }: AnimatedProfileProps)
             alt={alt}
             fill
             sizes="(max-width: 640px) 240px, (max-width: 1024px) 288px, 320px"
-            className="scale-[1.07] object-cover object-[50%_44%]"
+            className="scale-[1.32] object-cover object-[42%_48%]"
             quality={86}
             onError={() => setImageFailed(true)}
           />
