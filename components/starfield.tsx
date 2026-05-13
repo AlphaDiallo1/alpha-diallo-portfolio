@@ -1,112 +1,100 @@
 "use client"
 
-import { useRef, useEffect } from "react"
+import { useEffect, useRef } from "react"
+
+type Star = {
+  x: number
+  y: number
+  radius: number
+  speed: number
+  opacity: number
+  hue: number
+}
 
 export default function Starfield() {
-  const canvasRef = useRef(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
     const canvas = canvasRef.current
-    const ctx = canvas.getContext("2d")
-    let animationFrameId
-    let stars = []
+    const ctx = canvas?.getContext("2d", { alpha: true })
 
-    // Set canvas dimensions
+    if (!canvas || !ctx) {
+      return
+    }
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    let animationFrameId = 0
+    let resizeTimer = 0
+    let stars: Star[] = []
+    let width = 0
+    let height = 0
+    let dpr = 1
+
     const setCanvasDimensions = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5)
+      width = window.innerWidth
+      height = window.innerHeight
+      canvas.width = Math.floor(width * dpr)
+      canvas.height = Math.floor(height * dpr)
+      canvas.style.width = `${width}px`
+      canvas.style.height = `${height}px`
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
 
-    // Initialize stars
     const initStars = () => {
-      stars = []
-      const starCount = Math.floor((canvas.width * canvas.height) / 1000)
-
-      for (let i = 0; i < starCount; i++) {
-        stars.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          radius: Math.random() * 1.5,
-          speed: Math.random() * 0.5,
-          opacity: Math.random(),
-          hue: Math.random() * 60 + 200, // Blue to purple hues
-        })
-      }
+      const starCount = Math.min(720, Math.max(160, Math.floor((width * height) / 4200)))
+      stars = Array.from({ length: starCount }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 1.25 + 0.2,
+        speed: Math.random() * 0.24 + 0.04,
+        opacity: Math.random() * 0.72 + 0.18,
+        hue: Math.random() * 60 + 220,
+      }))
     }
 
-    // Draw stars
     const drawStars = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.clearRect(0, 0, width, height)
 
-      stars.forEach((star) => {
+      for (const star of stars) {
         ctx.beginPath()
         ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2)
-        ctx.fillStyle = `hsla(${star.hue}, 100%, 80%, ${star.opacity})`
+        ctx.fillStyle = `hsla(${star.hue}, 100%, 82%, ${star.opacity})`
         ctx.fill()
 
-        // Move star
-        star.y += star.speed
-
-        // Reset star position if it goes off screen
-        if (star.y > canvas.height) {
-          star.y = 0
-          star.x = Math.random() * canvas.width
+        if (!reduceMotion) {
+          star.y += star.speed
+          if (star.y > height) {
+            star.y = 0
+            star.x = Math.random() * width
+          }
+          star.opacity = 0.35 + Math.sin(performance.now() * 0.0007 * (star.speed + 0.5)) * 0.28
         }
-
-        // Twinkle effect
-        star.opacity = Math.sin(Date.now() * 0.001 * star.speed) * 0.5 + 0.5
-      })
-
-      // Occasional shooting star
-      if (Math.random() < 0.01) {
-        const shootingStar = {
-          x: Math.random() * canvas.width,
-          y: 0,
-          length: Math.random() * 80 + 20,
-          speed: Math.random() * 10 + 10,
-          angle: (Math.random() * Math.PI) / 4 + Math.PI / 4,
-          opacity: 1,
-        }
-
-        drawShootingStar(shootingStar)
       }
 
-      animationFrameId = requestAnimationFrame(drawStars)
+      if (!reduceMotion) {
+        animationFrameId = requestAnimationFrame(drawStars)
+      }
     }
 
-    // Draw shooting star
-    const drawShootingStar = (star) => {
-      const tailX = star.x - Math.cos(star.angle) * star.length
-      const tailY = star.y + Math.sin(star.angle) * star.length
-
-      const gradient = ctx.createLinearGradient(star.x, star.y, tailX, tailY)
-      gradient.addColorStop(0, "rgba(255, 255, 255, " + star.opacity + ")")
-      gradient.addColorStop(1, "rgba(145, 94, 255, 0)")
-
-      ctx.beginPath()
-      ctx.moveTo(star.x, star.y)
-      ctx.lineTo(tailX, tailY)
-      ctx.strokeStyle = gradient
-      ctx.lineWidth = 2
-      ctx.stroke()
-    }
-
-    // Handle resize
     const handleResize = () => {
-      setCanvasDimensions()
-      initStars()
+      window.clearTimeout(resizeTimer)
+      resizeTimer = window.setTimeout(() => {
+        setCanvasDimensions()
+        initStars()
+        drawStars()
+      }, 160)
     }
 
-    // Initialize
     setCanvasDimensions()
     initStars()
     drawStars()
 
-    window.addEventListener("resize", handleResize)
+    window.addEventListener("resize", handleResize, { passive: true })
 
-    // Cleanup
     return () => {
       window.removeEventListener("resize", handleResize)
+      window.clearTimeout(resizeTimer)
       cancelAnimationFrame(animationFrameId)
     }
   }, [])
@@ -114,9 +102,9 @@ export default function Starfield() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full pointer-events-none z-0"
-      style={{ opacity: 0.6 }}
+      aria-hidden="true"
+      className="fixed left-0 top-0 z-0 h-full w-full pointer-events-none"
+      style={{ opacity: 0.52 }}
     />
   )
 }
-

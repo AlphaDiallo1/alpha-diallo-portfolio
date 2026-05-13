@@ -4,7 +4,63 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 80px; /* This accounts for the fixed header */
+  scroll-padding-top: 80px;
+  background: #050816;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 50% -10%, rgba(145, 94, 255, 0.2), transparent 36%),
+    linear-gradient(180deg, #050816 0%, #080727 48%, #050816 100%);
+  text-rendering: geometricPrecision;
+}
+
+img,
+canvas,
+svg {
+  display: block;
+}
+
+.floating-element {
+  position: relative;
+  animation: portfolio-float var(--float-duration, 3000ms) ease-in-out infinite;
+  animation-delay: var(--float-delay, 0ms);
+  will-change: transform;
+}
+
+@keyframes portfolio-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, var(--float-y, -10px), 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .floating-element {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
 
 @layer base {
@@ -62,4 +118,3 @@ html {
     @apply bg-background text-foreground;
   }
 }
-
