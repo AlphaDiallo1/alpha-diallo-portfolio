@@ -104,7 +104,7 @@ export default function Starfield() {
       ref={canvasRef}
       aria-hidden="true"
       className="fixed left-0 top-0 z-0 h-full w-full pointer-events-none"
-      style={{ opacity: 0.52 }}
+      style={{ opacity: 0.64 }}
     />
   )
 }
