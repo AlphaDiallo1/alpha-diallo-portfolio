@@ -102,14 +102,17 @@ export default function AnimatedProfile({ imageUrl, alt }: AnimatedProfileProps)
             alt={alt}
             fill
             sizes="(max-width: 640px) 240px, (max-width: 1024px) 288px, 320px"
-            className="scale-[1.32] object-cover object-[42%_48%]"
+            className="scale-[1.24] object-cover object-center brightness-[0.88] contrast-[1.08] saturate-[1.12]"
             quality={86}
             onError={() => setImageFailed(true)}
           />
         )}
 
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_24%_20%,rgba(255,255,255,0.5)_0_1px,transparent_2px),radial-gradient(circle_at_78%_30%,rgba(185,156,255,0.62)_0_1px,transparent_2px),radial-gradient(circle_at_70%_72%,rgba(93,142,255,0.5)_0_1px,transparent_2px)] opacity-45 mix-blend-screen" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_48%_42%,transparent_0_34%,rgba(145,94,255,0.2)_58%,rgba(5,8,22,0.5)_100%)] mix-blend-overlay" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-[#050816]/45 via-[#915eff]/18 to-[#5d8eff]/24 mix-blend-color" />
         <motion.div
-          className="absolute inset-0 bg-gradient-to-tr from-[#915eff]/20 to-transparent"
+          className="absolute inset-0 bg-gradient-to-tr from-[#915eff]/20 via-transparent to-[#5d8eff]/20"
           animate={{ opacity: isHovered ? 0.75 : 0 }}
           transition={{ duration: 0.25 }}
         />
