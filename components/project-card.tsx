@@ -26,13 +26,19 @@ export default function ProjectCard({
   liveUrl,
 }: ProjectCardProps) {
   const [imgError, setImgError] = useState(false)
+  const showPreviewFallback = imgError || !imageUrl
 
   return (
     <Card className="group flex h-full flex-col overflow-hidden border-[#2a1b5a]/90 bg-[#151030]/80 shadow-[0_18px_60px_rgba(5,8,22,0.2)] transition-all duration-300 hover:-translate-y-1 hover:border-[#915eff]/60 hover:shadow-[0_24px_80px_rgba(145,94,255,0.22)]">
       <div className="relative aspect-video w-full overflow-hidden bg-[#0b0820]">
-        {imgError ? (
-          <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,#151030,#2a1b5a)] px-6 text-center text-sm font-semibold uppercase tracking-[0.16em] text-[#d8d4ff]">
-            {title}
+        {showPreviewFallback ? (
+          <div className="relative flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,#050816_0%,#151030_44%,#2a1b5a_100%)] px-6 text-center">
+            <div className="absolute inset-x-8 top-8 h-px bg-[#915eff]/45" />
+            <div className="absolute inset-x-14 bottom-8 h-px bg-[#5d8eff]/35" />
+            <div className="relative">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#b99cff]">Interactive 3D Lab</p>
+              <p className="mt-3 text-2xl font-bold tracking-tight text-white">{title}</p>
+            </div>
           </div>
         ) : (
           <Image
