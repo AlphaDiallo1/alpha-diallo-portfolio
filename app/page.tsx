@@ -34,7 +34,7 @@ const projects = [
     description:
       "A futuristic 3D armor configurator where users can rotate a cinematic robot suit, customize armor colors, toggle upgrades, review live stats, and save builds in a responsive lab interface.",
     technologies: ["Next.js", "TypeScript", "Three.js", "React Three Fiber", "Tailwind CSS"],
-    imageUrl: "",
+    imageUrl: "/images/x42-preview.svg",
     githubUrl: "https://github.com/AlphaDiallo1/X42",
     liveUrl: "https://x42.vercel.app/",
   },
