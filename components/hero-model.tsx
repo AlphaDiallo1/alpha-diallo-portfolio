@@ -40,7 +40,7 @@ function PremiumAstronaut(props: ThreeElements["group"]) {
   const group = useRef<THREE.Group>(null)
   const isMobile = useMobile()
   const [hovered, setHovered] = useState(false)
-  const scale = isMobile ? 1.42 : 1.86
+  const scale = isMobile ? 1.24 : 1.56
 
   const leftHose = useMemo(
     () => [new THREE.Vector3(-0.42, 0.34, 0.46), new THREE.Vector3(-0.86, 0.12, 0.34), new THREE.Vector3(-0.82, -0.5, 0.2)],
@@ -63,7 +63,7 @@ function PremiumAstronaut(props: ThreeElements["group"]) {
 
   return (
     <group ref={group} {...props} scale={[scale, scale, scale]} rotation={[0.04, -0.12, 0]}>
-      <Float speed={1.35} rotationIntensity={0.16} floatIntensity={0.45}>
+      <Float speed={1.18} rotationIntensity={0.14} floatIntensity={0.26}>
         <group onPointerOver={() => setHovered(true)} onPointerOut={() => setHovered(false)}>
           <mesh castShadow receiveShadow position={[0, -0.14, 0]} scale={[0.72, 0.98, 0.52]}>
             <capsuleGeometry args={[0.58, 0.95, 10, 24]} />
@@ -194,7 +194,7 @@ export default function HeroModel() {
     <div className="h-full w-full">
       <Canvas
         shadows
-        camera={{ position: [0, 0.2, 9.2], fov: 26 }}
+        camera={{ position: [0, 0.16, 9.8], fov: 31 }}
         dpr={[1, 1.5]}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       >
@@ -202,9 +202,9 @@ export default function HeroModel() {
         <spotLight position={[5, 6, 5]} angle={0.24} penumbra={0.85} intensity={1.1} castShadow />
         <pointLight position={[-4, 1.5, 4]} intensity={0.8} color="#915eff" />
         <pointLight position={[3, -2, 2]} intensity={0.42} color="#5d8eff" />
-        <PremiumAstronaut position={[0, -0.5, 0]} />
+        <PremiumAstronaut position={[0, -0.2, 0]} />
         <Environment preset="night" />
-        <ContactShadows position={[0, -2.35, 0]} opacity={0.24} scale={8} blur={1.5} far={4} frames={1} />
+        <ContactShadows position={[0, -2.58, 0]} opacity={0.24} scale={8} blur={1.5} far={4} frames={1} />
         <OrbitControls
           enableZoom={false}
           enablePan={false}
