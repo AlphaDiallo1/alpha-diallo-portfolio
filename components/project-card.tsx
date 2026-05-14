@@ -26,6 +26,7 @@ export default function ProjectCard({
   liveUrl,
 }: ProjectCardProps) {
   const [imgError, setImgError] = useState(false)
+  const isVectorPreview = imageUrl.endsWith(".svg")
   const showPreviewFallback = imgError || !imageUrl
 
   return (
@@ -48,6 +49,7 @@ export default function ProjectCard({
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 420px"
             className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.035]"
             quality={82}
+            unoptimized={isVectorPreview}
             onError={() => setImgError(true)}
           />
         )}
