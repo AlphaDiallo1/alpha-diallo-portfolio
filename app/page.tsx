@@ -1,206 +1,194 @@
-"use client"
-
 import Link from "next/link"
 import { Github, Linkedin, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import ProjectCard from "@/components/project-card"
 import SkillBadge from "@/components/skill-badge"
-import HeroModel from "@/components/hero-model"
-import Starfield from "@/components/starfield"
 import FloatingElement from "@/components/floating-element"
 import ScrollReveal from "@/components/scroll-reveal"
 import AnimatedProfile from "@/components/animated-profile"
-import Scroll3DObject from "@/components/scroll-3d-object"
-import { Suspense } from "react"
+import { HeroModelViewport, PortfolioVisuals } from "@/components/portfolio-visuals"
+
+const siteContainer = "mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 2xl:max-w-[1440px]"
+const sectionShell = "relative overflow-hidden py-20 sm:py-24 lg:py-28"
+const sectionBackground =
+  "absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(145,94,255,0.16),transparent_34%),linear-gradient(180deg,rgba(5,8,22,0.92),rgba(10,10,46,0.72),rgba(5,8,22,0.94))]"
+
+const skills = [
+  { name: "JavaScript", level: 90, delay: 0.05 },
+  { name: "React", level: 85, delay: 0.1 },
+  { name: "HTML/CSS", level: 90, delay: 0.15 },
+  { name: "Node.js", level: 75, delay: 0.2 },
+  { name: "TypeScript", level: 80, delay: 0.25 },
+  { name: "Next.js", level: 70, delay: 0.3 },
+  { name: "Git", level: 85, delay: 0.35 },
+  { name: "SQL", level: 65, delay: 0.4 },
+  { name: "Tailwind CSS", level: 80, delay: 0.45 },
+  { name: "RESTful APIs", level: 75, delay: 0.5 },
+  { name: "MongoDB", level: 60, delay: 0.55 },
+  { name: "Testing", level: 65, delay: 0.6 },
+]
+
+const projects = [
+  {
+    title: "X42",
+    description:
+      "A futuristic 3D armor configurator where users can rotate a cinematic robot suit, customize armor colors, toggle upgrades, review live stats, and save builds in a responsive lab interface.",
+    technologies: ["Next.js", "TypeScript", "Three.js", "React Three Fiber", "Tailwind CSS"],
+    imageUrl: "/images/x42-preview.svg",
+    githubUrl: "https://github.com/AlphaDiallo1/X42",
+    liveUrl: "https://x42.vercel.app/",
+  },
+  {
+    title: "Recipe Tracking App",
+    description:
+      "A frontend CRUD experience for creating, editing, displaying, and deleting recipes with a clean workflow for organizing favorite meals.",
+    technologies: ["React", "React Hooks", "JavaScript", "HTML", "CSS"],
+    imageUrl: "/images/recipe-app.png",
+    githubUrl: "https://github.com/AlphaDiallo1/RecipeApp",
+    liveUrl: "https://recipe-app-alpha.vercel.app",
+  },
+  {
+    title: "ThinkfulBnB",
+    description:
+      "A responsive vacation-rental landing experience with property listings, search-focused structure, and layouts tuned for desktop and mobile users.",
+    technologies: ["HTML", "CSS", "JavaScript", "Responsive Design"],
+    imageUrl: "/images/thinkfulbnb.png",
+    githubUrl: "https://github.com/AlphaDiallo1/thinkfulbnb",
+    liveUrl: "https://thinkfulbnb-five.vercel.app/",
+  },
+]
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#050816] text-white overflow-hidden">
-      <Starfield />
-      <Scroll3DObject />
+    <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-[#050816] text-white">
+      <PortfolioVisuals />
 
-      <header className="sticky top-0 z-10 backdrop-blur-sm bg-[#050816]/75 border-b border-[#2a1b5a]">
-        <div className="container flex h-16 items-center justify-between">
-          <Link href="/" className="font-bold text-xl text-[#aaa6c3]">
-            <FloatingElement>Alpha Diallo</FloatingElement>
+      <header className="sticky top-0 z-30 border-b border-[#2a1b5a]/80 bg-[#050816]/80 backdrop-blur-xl">
+        <div className={`${siteContainer} flex h-16 items-center justify-between gap-4`}>
+          <Link href="/" className="min-w-0 text-lg font-bold text-[#d8d4ff] transition-colors hover:text-white sm:text-xl">
+            <FloatingElement yOffset={6} duration={3600}>
+              Alpha Diallo
+            </FloatingElement>
           </Link>
-          <nav className="hidden md:flex gap-6">
-            <a
-              href="#about"
-              className="text-sm font-medium hover:text-[#915eff] transition-colors"
-              onClick={(e) => {
-                e.preventDefault()
-                document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })
-              }}
-            >
-              About
-            </a>
-            <a
-              href="#skills"
-              className="text-sm font-medium hover:text-[#915eff] transition-colors"
-              onClick={(e) => {
-                e.preventDefault()
-                document.getElementById("skills")?.scrollIntoView({ behavior: "smooth" })
-              }}
-            >
-              Skills
-            </a>
-            <a
-              href="#projects"
-              className="text-sm font-medium hover:text-[#915eff] transition-colors"
-              onClick={(e) => {
-                e.preventDefault()
-                document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })
-              }}
-            >
-              Projects
-            </a>
-            <a
-              href="#contact"
-              className="text-sm font-medium hover:text-[#915eff] transition-colors"
-              onClick={(e) => {
-                e.preventDefault()
-                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
-              }}
-            >
-              Contact
-            </a>
+          <nav className="hidden items-center gap-7 md:flex" aria-label="Primary navigation">
+            {["about", "skills", "projects", "contact"].map((item) => (
+              <a
+                key={item}
+                href={`#${item}`}
+                className="text-sm font-medium capitalize text-[#aaa6c3] transition-colors duration-200 hover:text-[#b99cff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#915eff]"
+              >
+                {item}
+              </a>
+            ))}
           </nav>
-          <div className="flex items-center gap-2">
-            <Link href="https://github.com/AlphaDiallo1" target="_blank" rel="noopener noreferrer">
-              <Button variant="ghost" size="icon" className="text-[#aaa6c3] hover:text-[#915eff]">
+          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+            <Button asChild variant="ghost" size="icon" className="text-[#aaa6c3] hover:text-[#b99cff]">
+              <Link href="https://github.com/AlphaDiallo1" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
                 <Github className="h-5 w-5" />
-                <span className="sr-only">GitHub</span>
-              </Button>
-            </Link>
-            <Link href="https://www.linkedin.com/in/alpha-diallo-a43b38217/" target="_blank" rel="noopener noreferrer">
-              <Button variant="ghost" size="icon" className="text-[#aaa6c3] hover:text-[#915eff]">
+              </Link>
+            </Button>
+            <Button asChild variant="ghost" size="icon" className="text-[#aaa6c3] hover:text-[#b99cff]">
+              <Link
+                href="https://www.linkedin.com/in/alpha-diallo-a43b38217/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn profile"
+              >
                 <Linkedin className="h-5 w-5" />
-                <span className="sr-only">LinkedIn</span>
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 relative">
-        {/* Hero Section with 3D Model */}
-        <section className="py-20 md:py-32 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#050816] via-[#0a0a2e] to-[#050816] opacity-50"></div>
-          <div className="container px-4 md:px-6 relative z-10">
-            <div className="grid md:grid-cols-2 gap-10 items-center">
-              <div className="flex flex-col items-start space-y-4">
-                <FloatingElement yOffset={15} duration={3000}>
-                  <h1 className="text-3xl md:text-5xl font-bold tracking-tighter">
-                    Hi, I'm <span className="text-[#915eff]">Alpha Diallo</span>
+      <main className="relative z-10 flex-1">
+        <section className="relative overflow-hidden py-20 sm:py-24 lg:py-32">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_38%,rgba(145,94,255,0.22),transparent_32%),linear-gradient(180deg,rgba(5,8,22,0.68),rgba(10,10,46,0.5),rgba(5,8,22,0.86))]" />
+          <div className={`${siteContainer} relative z-10`}>
+            <div className="grid min-h-[calc(100vh-8rem)] items-center gap-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(420px,1.08fr)] xl:gap-16">
+              <div className="mx-auto flex max-w-3xl flex-col items-center text-center lg:mx-0 lg:items-start lg:text-left">
+                <FloatingElement yOffset={12} duration={4200}>
+                  <p className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-[#915eff]">3D Developer Portfolio</p>
+                  <h1 className="text-balance text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl">
+                    Hi, I'm <span className="text-[#b99cff]">Alpha Diallo</span>
                   </h1>
                 </FloatingElement>
-                <FloatingElement yOffset={10} duration={3500} delay={200}>
-                  <p className="text-xl md:text-2xl text-[#aaa6c3]">Software Engineer exploring the digital universe</p>
+                <FloatingElement yOffset={8} duration={4600} delay={160}>
+                  <p className="mt-6 max-w-2xl text-lg leading-8 text-[#c7c3df] sm:text-xl lg:text-2xl">
+                    Software engineer building responsive web experiences with clean interfaces, thoughtful motion, and
+                    production-minded front-end architecture.
+                  </p>
                 </FloatingElement>
-                <div className="flex flex-col sm:flex-row gap-3 mt-6">
-                  <FloatingElement yOffset={5} duration={4000} delay={400}>
-                    <Button
-                      size="lg"
-                      className="bg-[#915eff] hover:bg-[#7d4edb] text-white"
-                      onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-                    >
-                      Get in Touch
-                    </Button>
-                  </FloatingElement>
-                  <FloatingElement yOffset={5} duration={4000} delay={600}>
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="border-[#915eff] text-[#aaa6c3] hover:bg-[#915eff]/10"
-                      onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
-                    >
-                      View My Work
-                    </Button>
-                  </FloatingElement>
+                <div className="mt-8 flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row lg:justify-start">
+                  <Button asChild size="lg" className="bg-[#915eff] text-white shadow-[0_0_28px_rgba(145,94,255,0.28)] transition-transform duration-200 hover:-translate-y-0.5 hover:bg-[#7d4edb]">
+                    <a href="#contact">Get in Touch</a>
+                  </Button>
+                  <Button asChild variant="outline" size="lg" className="border-[#915eff]/80 bg-[#151030]/40 text-[#d8d4ff] transition-transform duration-200 hover:-translate-y-0.5 hover:bg-[#915eff]/10">
+                    <a href="#projects">View My Work</a>
+                  </Button>
                 </div>
               </div>
-              <div className="h-[400px] w-full">
-                <Suspense
-                  fallback={
-                    <div className="w-full h-full flex items-center justify-center text-[#aaa6c3]">
-                      Loading 3D Model...
-                    </div>
-                  }
-                >
-                  <HeroModel />
-                </Suspense>
-              </div>
+              <HeroModelViewport />
             </div>
           </div>
         </section>
 
-        {/* About Section */}
-        <section id="about" className="py-16 md:py-24 relative">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#050816] via-[#0a0a2e] to-[#050816] opacity-30"></div>
-          <div className="container px-4 md:px-6 relative z-10">
+        <section id="about" className={sectionShell}>
+          <div className={sectionBackground} />
+          <div className={`${siteContainer} relative z-10`}>
             <ScrollReveal>
-              <h2 className="text-3xl font-bold tracking-tighter mb-8 text-center text-[#aaa6c3]">About Me</h2>
+              <div className="mx-auto mb-12 max-w-3xl text-center">
+                <p className="mb-3 text-sm font-semibold uppercase tracking-[0.22em] text-[#915eff]">About Me</p>
+                <h2 className="text-3xl font-bold tracking-tight text-[#f4f1ff] sm:text-4xl lg:text-5xl">Coding Journey</h2>
+              </div>
             </ScrollReveal>
-            <div className="grid md:grid-cols-2 gap-10 items-center">
-              <ScrollReveal direction="left" delay={0.2}>
+            <div className="grid items-center gap-12 lg:grid-cols-[360px_minmax(0,1fr)] xl:gap-16">
+              <ScrollReveal direction="left" delay={0.12}>
                 <AnimatedProfile imageUrl="/images/profile.png" alt="Alpha Diallo" />
               </ScrollReveal>
-              <div className="space-y-4">
-                <ScrollReveal direction="right" delay={0.3}>
-                  <p className="text-lg text-[#aaa6c3]">
-                    Currently new to HTML and CSS, I had an amazing time building this website. I was introduced to
-                    Thinkful by my close relative, I'm determined to become a skilled coder. I'm committed to daily
-                    improvement, working with thinkful has been a great help with more work I will achieve my dreams.
-                  </p>
-                </ScrollReveal>
-                <ScrollReveal direction="right" delay={0.4}>
-                  <p className="text-lg text-[#aaa6c3]">
-                    Outside of coding, I enjoy exploring Staten Island, New York, Professional Wrestling, and Anime.
-                  </p>
-                </ScrollReveal>
-                <ScrollReveal direction="right" delay={0.5}>
-                  <p className="text-lg text-[#aaa6c3]">
-                    If you're looking for a passionate and dedicated software engineer, feel free to reach out! I'm
-                    enthusiastic about collaborating with like-minded professionals and making a positive impact on the
-                    tech community.
-                  </p>
-                </ScrollReveal>
-                <ScrollReveal direction="right" delay={0.6}>
-                  <h3 className="text-xl font-semibold text-[#915eff] mt-4 mb-2">My Coding Journey</h3>
-                  <p className="text-lg text-[#aaa6c3]">
-                    I started coding with a strong determination to improve every day. I'm excited to explore new
-                    opportunities and challenges in the coding world.
-                  </p>
+              <div className="mx-auto max-w-3xl lg:mx-0">
+                <ScrollReveal direction="right" delay={0.18}>
+                  <div className="rounded-lg border border-[#2a1b5a]/80 bg-[#151030]/60 p-6 shadow-[0_24px_80px_rgba(5,8,22,0.36)] backdrop-blur md:p-8">
+                    <p className="text-xl font-semibold leading-8 text-white">
+                      I am an emerging software engineer focused on building polished, useful web products with React,
+                      Next.js, JavaScript, HTML, CSS, and modern UI tooling.
+                    </p>
+                    <div className="mt-6 space-y-5 text-base leading-8 text-[#c7c3df] sm:text-lg">
+                      <p>
+                        My path into coding started with curiosity and daily practice. Through Thinkful and hands-on
+                        project work, I have been learning how to turn ideas into responsive interfaces, structure
+                        reusable components, and make user experiences feel clear, fast, and dependable.
+                      </p>
+                      <p>
+                        I care about the details that make software feel professional: readable layouts, accessible
+                        interactions, performance-aware rendering, and designs that stay balanced across phones,
+                        laptops, large desktops, and ultrawide screens.
+                      </p>
+                      <p>
+                        Outside of coding, I enjoy exploring Staten Island, following professional wrestling, and
+                        watching anime. That mix of discipline, storytelling, and visual energy influences the
+                        futuristic style of this portfolio.
+                      </p>
+                    </div>
+                  </div>
                 </ScrollReveal>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Skills Section */}
-        <section id="skills" className="py-16 md:py-24 relative">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#050816] via-[#0a0a2e] to-[#050816] opacity-30"></div>
-          <div className="container px-4 md:px-6 relative z-10">
+        <section id="skills" className={sectionShell}>
+          <div className={sectionBackground} />
+          <div className={`${siteContainer} relative z-10`}>
             <ScrollReveal>
-              <h2 className="text-3xl font-bold tracking-tighter mb-8 text-center text-[#aaa6c3]">My Skills</h2>
+              <div className="mx-auto mb-12 max-w-3xl text-center">
+                <p className="mb-3 text-sm font-semibold uppercase tracking-[0.22em] text-[#915eff]">Toolbox</p>
+                <h2 className="text-3xl font-bold tracking-tight text-[#f4f1ff] sm:text-4xl lg:text-5xl">My Skills</h2>
+              </div>
             </ScrollReveal>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {[
-                { name: "JavaScript", level: 90, delay: 0.1 },
-                { name: "React", level: 85, delay: 0.2 },
-                { name: "HTML/CSS", level: 90, delay: 0.3 },
-                { name: "Node.js", level: 75, delay: 0.4 },
-                { name: "TypeScript", level: 80, delay: 0.5 },
-                { name: "Next.js", level: 70, delay: 0.6 },
-                { name: "Git", level: 85, delay: 0.7 },
-                { name: "SQL", level: 65, delay: 0.8 },
-                { name: "Tailwind CSS", level: 80, delay: 0.9 },
-                { name: "RESTful APIs", level: 75, delay: 1.0 },
-                { name: "MongoDB", level: 60, delay: 1.1 },
-                { name: "Testing", level: 65, delay: 1.2 },
-              ].map((skill, index) => (
-                <ScrollReveal key={skill.name} delay={skill.delay} distance={20} once={false}>
+            <div className="mx-auto grid max-w-6xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {skills.map((skill) => (
+                <ScrollReveal key={skill.name} delay={skill.delay} distance={24}>
                   <SkillBadge name={skill.name} level={skill.level} />
                 </ScrollReveal>
               ))}
@@ -208,148 +196,116 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Projects Section */}
-        <section id="projects" className="py-16 md:py-24 relative">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#050816] via-[#0a0a2e] to-[#050816] opacity-30"></div>
-          <div className="container px-4 md:px-6 relative z-10">
+        <section id="projects" className={sectionShell}>
+          <div className={sectionBackground} />
+          <div className={`${siteContainer} relative z-10`}>
             <ScrollReveal>
-              <h2 className="text-3xl font-bold tracking-tighter mb-8 text-center text-[#aaa6c3]">My Projects</h2>
+              <div className="mx-auto mb-12 max-w-3xl text-center">
+                <p className="mb-3 text-sm font-semibold uppercase tracking-[0.22em] text-[#915eff]">Selected Work</p>
+                <h2 className="text-3xl font-bold tracking-tight text-[#f4f1ff] sm:text-4xl lg:text-5xl">My Projects</h2>
+              </div>
             </ScrollReveal>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <ScrollReveal direction="up" delay={0.2} once={false}>
-                <ProjectCard
-                  title="Flashcard-O-Matic"
-                  description="An interactive flashcard application that displays decks of study cards with questions and answers. Users can flip cards to study and edit or delete cards."
-                  technologies={["React.js", "JavaScript", "HTML", "CSS"]}
-                  imageUrl="/images/flashcard-app.png"
-                  githubUrl="https://github.com/AlphaDiallo1/FlashCardApp"
-                  liveUrl="https://flashcard-app-alpha.vercel.app"
-                />
-              </ScrollReveal>
-              <ScrollReveal direction="up" delay={0.4} once={false}>
-                <ProjectCard
-                  title="Recipe Tracking App"
-                  description="A frontend CRUD application for creating, editing, displaying, and deleting recipes. Features a clean, user-friendly interface for managing your favorite recipes."
-                  technologies={["React", "React Hooks", "JavaScript", "HTML", "CSS"]}
-                  imageUrl="/images/recipe-app.png"
-                  githubUrl="https://github.com/AlphaDiallo1/RecipeApp"
-                  liveUrl="https://recipe-app-alpha.vercel.app"
-                />
-              </ScrollReveal>
-              <ScrollReveal direction="up" delay={0.6} once={false}>
-                <ProjectCard
-                  title="ThinkfulBnB"
-                  description="A responsive vacation rental website inspired by Airbnb. Features property listings, search functionality, and a responsive design for all devices."
-                  technologies={["HTML", "CSS", "JavaScript", "Responsive Design"]}
-                  imageUrl="/images/thinkfulbnb.png"
-                  githubUrl="https://github.com/AlphaDiallo1/thinkfulbnb"
-                  liveUrl="https://thinkfulbnb-five.vercel.app/"
-                />
-              </ScrollReveal>
+            <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {projects.map((project, index) => (
+                <ScrollReveal key={project.title} direction="up" delay={0.14 + index * 0.1} distance={28}>
+                  <ProjectCard {...project} />
+                </ScrollReveal>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* Contact Section */}
-        <section id="contact" className="py-16 md:py-24 relative">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#050816] via-[#0a0a2e] to-[#050816] opacity-30"></div>
-          <div className="container px-4 md:px-6 relative z-10">
-            <ScrollReveal once={false}>
-              <h2 className="text-3xl font-bold tracking-tighter mb-8 text-center text-[#aaa6c3]">Get In Touch</h2>
+        <section id="contact" className={sectionShell}>
+          <div className={sectionBackground} />
+          <div className={`${siteContainer} relative z-10`}>
+            <ScrollReveal>
+              <div className="mx-auto mb-12 max-w-3xl text-center">
+                <p className="mb-3 text-sm font-semibold uppercase tracking-[0.22em] text-[#915eff]">Contact</p>
+                <h2 className="text-3xl font-bold tracking-tight text-[#f4f1ff] sm:text-4xl lg:text-5xl">Get In Touch</h2>
+              </div>
             </ScrollReveal>
-            <div className="grid md:grid-cols-2 gap-10">
-              <div className="space-y-4">
-                <ScrollReveal direction="left" delay={0.2} once={false}>
-                  <p className="text-lg text-[#aaa6c3]">
-                    I'm currently open to new opportunities and collaborations. Feel free to reach out if you'd like to
-                    work together or just want to connect!
+            <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
+              <div className="space-y-6 rounded-lg border border-[#2a1b5a]/80 bg-[#151030]/45 p-6 backdrop-blur md:p-8">
+                <ScrollReveal direction="left" delay={0.12}>
+                  <p className="text-lg leading-8 text-[#c7c3df]">
+                    I am open to software engineering opportunities, collaborations, and conversations with people
+                    building thoughtful digital products. Reach out and I will get back to you as soon as I can.
                   </p>
                 </ScrollReveal>
-                <ScrollReveal direction="left" delay={0.4} once={false}>
-                  <div className="flex items-center gap-2">
+                <ScrollReveal direction="left" delay={0.2}>
+                  <div className="flex flex-wrap items-center gap-3 text-[#d8d4ff]">
                     <Mail className="h-5 w-5 text-[#915eff]" />
-                    <a href="mailto:adiallo371@gmail.com" className="text-[#915eff] hover:underline">
+                    <a href="mailto:adiallo371@gmail.com" className="break-all text-[#b99cff] transition-colors hover:text-white">
                       adiallo371@gmail.com
                     </a>
                   </div>
                 </ScrollReveal>
-                <ScrollReveal direction="left" delay={0.6} once={false}>
-                  <div className="flex gap-4 mt-6">
-                    <Link href="https://github.com/AlphaDiallo1" target="_blank" rel="noopener noreferrer">
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="border-[#915eff] text-[#aaa6c3] hover:bg-[#915eff]/10"
-                      >
+                <ScrollReveal direction="left" delay={0.28}>
+                  <div className="flex gap-4">
+                    <Button asChild variant="outline" size="icon" className="border-[#915eff]/80 text-[#d8d4ff] hover:bg-[#915eff]/10">
+                      <Link href="https://github.com/AlphaDiallo1" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
                         <Github className="h-5 w-5" />
-                        <span className="sr-only">GitHub</span>
-                      </Button>
-                    </Link>
-                    <Link
-                      href="https://www.linkedin.com/in/alpha-diallo-a43b38217/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="border-[#915eff] text-[#aaa6c3] hover:bg-[#915eff]/10"
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline" size="icon" className="border-[#915eff]/80 text-[#d8d4ff] hover:bg-[#915eff]/10">
+                      <Link
+                        href="https://www.linkedin.com/in/alpha-diallo-a43b38217/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="LinkedIn profile"
                       >
                         <Linkedin className="h-5 w-5" />
-                        <span className="sr-only">LinkedIn</span>
-                      </Button>
-                    </Link>
+                      </Link>
+                    </Button>
                   </div>
                 </ScrollReveal>
               </div>
-              <ScrollReveal direction="right" delay={0.4} once={false}>
-                <form className="space-y-4 bg-[#151030] p-6 rounded-lg border border-[#2a1b5a]">
-                  <div className="grid gap-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label htmlFor="name" className="text-sm font-medium leading-none text-[#aaa6c3]">
-                          Name
-                        </label>
-                        <input
-                          id="name"
-                          className="flex h-10 w-full rounded-md border border-[#2a1b5a] bg-[#1d1836] px-3 py-2 text-sm text-white ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-[#aaa6c3]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#915eff] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                          placeholder="Your name"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label htmlFor="email" className="text-sm font-medium leading-none text-[#aaa6c3]">
-                          Email
-                        </label>
-                        <input
-                          id="email"
-                          type="email"
-                          className="flex h-10 w-full rounded-md border border-[#2a1b5a] bg-[#1d1836] px-3 py-2 text-sm text-white ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-[#aaa6c3]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#915eff] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                          placeholder="Your email"
-                        />
-                      </div>
-                    </div>
+              <ScrollReveal direction="right" delay={0.18}>
+                <form className="space-y-4 rounded-lg border border-[#2a1b5a]/90 bg-[#151030]/75 p-6 shadow-[0_24px_80px_rgba(5,8,22,0.34)] backdrop-blur md:p-8">
+                  <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
-                      <label htmlFor="subject" className="text-sm font-medium leading-none text-[#aaa6c3]">
-                        Subject
+                      <label htmlFor="name" className="text-sm font-medium leading-none text-[#d8d4ff]">
+                        Name
                       </label>
                       <input
-                        id="subject"
-                        className="flex h-10 w-full rounded-md border border-[#2a1b5a] bg-[#1d1836] px-3 py-2 text-sm text-white ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-[#aaa6c3]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#915eff] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        placeholder="Subject"
+                        id="name"
+                        className="flex h-11 w-full rounded-md border border-[#2a1b5a] bg-[#1d1836] px-3 py-2 text-sm text-white placeholder:text-[#aaa6c3]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#915eff]"
+                        placeholder="Your name"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label htmlFor="message" className="text-sm font-medium leading-none text-[#aaa6c3]">
-                        Message
+                      <label htmlFor="email" className="text-sm font-medium leading-none text-[#d8d4ff]">
+                        Email
                       </label>
-                      <textarea
-                        id="message"
-                        className="flex min-h-[120px] w-full rounded-md border border-[#2a1b5a] bg-[#1d1836] px-3 py-2 text-sm text-white ring-offset-background placeholder:text-[#aaa6c3]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#915eff] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        placeholder="Your message"
+                      <input
+                        id="email"
+                        type="email"
+                        className="flex h-11 w-full rounded-md border border-[#2a1b5a] bg-[#1d1836] px-3 py-2 text-sm text-white placeholder:text-[#aaa6c3]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#915eff]"
+                        placeholder="Your email"
                       />
                     </div>
                   </div>
-                  <Button type="submit" className="w-full bg-[#915eff] hover:bg-[#7d4edb] text-white">
+                  <div className="space-y-2">
+                    <label htmlFor="subject" className="text-sm font-medium leading-none text-[#d8d4ff]">
+                      Subject
+                    </label>
+                    <input
+                      id="subject"
+                      className="flex h-11 w-full rounded-md border border-[#2a1b5a] bg-[#1d1836] px-3 py-2 text-sm text-white placeholder:text-[#aaa6c3]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#915eff]"
+                      placeholder="Subject"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="message" className="text-sm font-medium leading-none text-[#d8d4ff]">
+                      Message
+                    </label>
+                    <textarea
+                      id="message"
+                      className="flex min-h-[140px] w-full resize-y rounded-md border border-[#2a1b5a] bg-[#1d1836] px-3 py-2 text-sm text-white placeholder:text-[#aaa6c3]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#915eff]"
+                      placeholder="Your message"
+                    />
+                  </div>
+                  <Button type="submit" className="w-full bg-[#915eff] text-white transition-transform duration-200 hover:-translate-y-0.5 hover:bg-[#7d4edb]">
                     Send Message
                   </Button>
                 </form>
@@ -358,12 +314,12 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <footer className="border-t border-[#2a1b5a] py-6 md:py-8 relative">
-        <div className="container flex flex-col items-center justify-center gap-4 text-center md:flex-row md:gap-6">
-          <p className="text-sm text-[#aaa6c3]">© {new Date().getFullYear()} Alpha Diallo. All rights reserved.</p>
+
+      <footer className="relative z-10 border-t border-[#2a1b5a]/80 py-6 md:py-8">
+        <div className={`${siteContainer} flex flex-col items-center justify-center gap-4 text-center md:flex-row md:gap-6`}>
+          <p className="text-sm text-[#aaa6c3]">&copy; {new Date().getFullYear()} Alpha Diallo. All rights reserved.</p>
         </div>
       </footer>
     </div>
   )
 }
-

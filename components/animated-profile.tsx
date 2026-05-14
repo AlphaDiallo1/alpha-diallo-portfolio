@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import { motion, useAnimation, useInView } from "framer-motion"
+import Image from "next/image"
+import { useEffect, useRef, useState } from "react"
+import { motion, useAnimation, useInView, useReducedMotion } from "framer-motion"
 
 interface AnimatedProfileProps {
   imageUrl: string
@@ -10,50 +11,39 @@ interface AnimatedProfileProps {
 
 export default function AnimatedProfile({ imageUrl, alt }: AnimatedProfileProps) {
   const [isHovered, setIsHovered] = useState(false)
-  const profileRef = useRef(null)
-  const isInView = useInView(profileRef, { once: false, margin: "-100px 0px" })
+  const [imageFailed, setImageFailed] = useState(false)
+  const profileRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(profileRef, { once: true, margin: "-80px 0px" })
   const controls = useAnimation()
+  const reduceMotion = useReducedMotion()
 
   useEffect(() => {
-    if (isInView) {
+    if (reduceMotion || isInView) {
       controls.start({
         scale: 1,
         opacity: 1,
         filter: "blur(0px)",
         transition: {
-          duration: 0.8,
+          duration: reduceMotion ? 0 : 0.7,
           ease: [0.25, 0.1, 0.25, 1],
         },
       })
-    } else {
-      controls.start({
-        scale: 0.9,
-        opacity: 0,
-        filter: "blur(10px)",
-        transition: {
-          duration: 0.5,
-        },
-      })
     }
-  }, [isInView, controls])
+  }, [controls, isInView, reduceMotion])
 
   return (
     <div
-      className="relative w-64 h-64 mx-auto"
+      className="relative mx-auto aspect-square w-64 max-w-[78vw] sm:w-72 lg:w-80"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       ref={profileRef}
     >
-      {/* Rotating outer ring */}
       <motion.div
         className="absolute inset-0 rounded-full"
-        animate={{
-          rotate: 360,
-          borderWidth: isHovered ? 6 : 4,
-        }}
+        animate={reduceMotion ? undefined : { rotate: 360, borderWidth: isHovered ? 6 : 4 }}
         transition={{
           rotate: {
-            duration: 20,
+            duration: 24,
             repeat: Number.POSITIVE_INFINITY,
             ease: "linear",
           },
@@ -62,8 +52,7 @@ export default function AnimatedProfile({ imageUrl, alt }: AnimatedProfileProps)
           },
         }}
         style={{
-          border: `4px solid transparent`,
-          borderRadius: "50%",
+          border: "4px solid transparent",
           borderTopColor: "#915eff",
           borderRightColor: "#5d8eff",
           borderBottomColor: "#915eff",
@@ -71,67 +60,70 @@ export default function AnimatedProfile({ imageUrl, alt }: AnimatedProfileProps)
         }}
       />
 
-      {/* Pulsing middle ring */}
       <motion.div
         className="absolute inset-2 rounded-full"
-        animate={{
-          scale: isHovered ? [1, 1.05, 1] : 1,
-          opacity: isHovered ? [0.5, 0.8, 0.5] : 0.5,
-        }}
+        animate={
+          reduceMotion
+            ? undefined
+            : {
+                scale: isHovered ? [1, 1.05, 1] : 1,
+                opacity: isHovered ? [0.52, 0.82, 0.52] : 0.52,
+              }
+        }
         transition={{
           scale: {
-            duration: 2,
+            duration: 2.2,
             repeat: Number.POSITIVE_INFINITY,
             ease: "easeInOut",
           },
           opacity: {
-            duration: 2,
+            duration: 2.2,
             repeat: Number.POSITIVE_INFINITY,
             ease: "easeInOut",
           },
         }}
         style={{
-          background: "radial-gradient(circle, rgba(145,94,255,0.2) 0%, rgba(93,142,255,0) 70%)",
+          background: "radial-gradient(circle, rgba(145,94,255,0.22) 0%, rgba(93,142,255,0) 70%)",
         }}
       />
 
-      {/* Image container with special fade-in effect */}
       <motion.div
-        className="absolute inset-4 rounded-full overflow-hidden border-2 border-[#915eff]/50"
+        className="absolute inset-4 overflow-hidden rounded-full border-2 border-[#915eff]/50 bg-[#151030]"
         animate={controls}
-        initial={{ scale: 0.9, opacity: 0, filter: "blur(10px)" }}
+        initial={{ scale: 0.94, opacity: 0, filter: "blur(8px)" }}
       >
-        <div className="w-full h-full flex items-center justify-center overflow-hidden">
-          <img
+        {imageFailed ? (
+          <div className="flex h-full w-full items-center justify-center bg-[#151030] text-center text-sm font-semibold uppercase tracking-[0.18em] text-[#aaa6c3]">
+            Alpha Diallo
+          </div>
+        ) : (
+          <Image
             src={imageUrl || "/placeholder.svg"}
             alt={alt}
-            className="w-full h-full object-cover object-center"
-            onError={(e) => {
-              // Fallback if image fails to load
-              e.currentTarget.src = "https://placehold.co/400x400/151030/915eff?text=Alpha+Diallo"
-            }}
+            fill
+            sizes="(max-width: 640px) 240px, (max-width: 1024px) 288px, 320px"
+            className="scale-[1.24] object-cover object-center brightness-[0.88] contrast-[1.08] saturate-[1.12]"
+            quality={86}
+            onError={() => setImageFailed(true)}
           />
-        </div>
+        )}
 
-        {/* Overlay effect on hover */}
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_24%_20%,rgba(255,255,255,0.5)_0_1px,transparent_2px),radial-gradient(circle_at_78%_30%,rgba(185,156,255,0.62)_0_1px,transparent_2px),radial-gradient(circle_at_70%_72%,rgba(93,142,255,0.5)_0_1px,transparent_2px)] opacity-45 mix-blend-screen" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_48%_42%,transparent_0_34%,rgba(145,94,255,0.2)_58%,rgba(5,8,22,0.5)_100%)] mix-blend-overlay" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-[#050816]/45 via-[#915eff]/18 to-[#5d8eff]/24 mix-blend-color" />
         <motion.div
-          className="absolute inset-0 bg-gradient-to-tr from-[#915eff]/20 to-transparent"
-          animate={{
-            opacity: isHovered ? 0.8 : 0,
-          }}
-          transition={{
-            duration: 0.3,
-          }}
+          className="absolute inset-0 bg-gradient-to-tr from-[#915eff]/20 via-transparent to-[#5d8eff]/20"
+          animate={{ opacity: isHovered ? 0.75 : 0 }}
+          transition={{ duration: 0.25 }}
         />
       </motion.div>
 
-      {/* Particles around the profile */}
-      {isHovered && (
+      {isHovered && !reduceMotion && (
         <>
-          {[...Array(8)].map((_, i) => (
+          {Array.from({ length: 8 }).map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-2 h-2 rounded-full bg-[#915eff]"
+              className="absolute h-2 w-2 rounded-full bg-[#915eff]"
               initial={{
                 x: 0,
                 y: 0,
@@ -163,4 +155,3 @@ export default function AnimatedProfile({ imageUrl, alt }: AnimatedProfileProps)
     </div>
   )
 }
-
