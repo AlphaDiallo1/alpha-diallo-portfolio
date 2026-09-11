@@ -1,7 +1,7 @@
 "use client"
 
-import { type ReactNode, useRef, useEffect } from "react"
-import { motion, useAnimation, useInView } from "framer-motion"
+import { type ReactNode, useEffect, useMemo, useRef } from "react"
+import { motion, useAnimation, useInView, useReducedMotion } from "framer-motion"
 
 interface ScrollRevealProps {
   children: ReactNode
@@ -16,53 +16,63 @@ export default function ScrollReveal({
   children,
   direction = "up",
   delay = 0,
-  duration = 0.5,
-  distance = 50,
-  once = false, // Changed to false to enable animations when scrolling up
+  duration = 0.48,
+  distance = 42,
+  once = true,
 }: ScrollRevealProps) {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once, margin: "-100px 0px" })
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref, { once, margin: "-80px 0px" })
   const controls = useAnimation()
+  const reduceMotion = useReducedMotion()
 
-  // Set initial direction offsets
-  let x = 0
-  let y = 0
+  const offset = useMemo(() => {
+    if (reduceMotion) {
+      return { x: 0, y: 0 }
+    }
 
-  if (direction === "up") y = distance
-  if (direction === "down") y = -distance
-  if (direction === "left") x = distance
-  if (direction === "right") x = -distance
+    if (direction === "up") return { x: 0, y: distance }
+    if (direction === "down") return { x: 0, y: -distance }
+    if (direction === "left") return { x: distance, y: 0 }
+    return { x: -distance, y: 0 }
+  }, [direction, distance, reduceMotion])
 
   useEffect(() => {
-    if (isInView) {
+    if (reduceMotion || isInView) {
       controls.start({
         x: 0,
         y: 0,
         opacity: 1,
         transition: {
-          duration,
-          delay,
+          duration: reduceMotion ? 0 : duration,
+          delay: reduceMotion ? 0 : delay,
           ease: [0.25, 0.1, 0.25, 1],
         },
       })
-    } else {
-      // Reset animation when element is out of view
+      return
+    }
+
+    if (!once) {
       controls.start({
-        x,
-        y,
+        x: offset.x,
+        y: offset.y,
         opacity: 0,
         transition: {
-          duration: duration * 0.5,
+          duration: duration * 0.4,
           ease: [0.25, 0.1, 0.25, 1],
         },
       })
     }
-  }, [isInView, controls, delay, duration, x, y])
+  }, [controls, delay, duration, isInView, offset.x, offset.y, once, reduceMotion])
 
   return (
-    <motion.div ref={ref} initial={{ opacity: 0, x, y }} animate={controls} className="w-full">
+    <motion.div
+      ref={ref}
+      initial={{ opacity: reduceMotion ? 1 : 0, x: offset.x, y: offset.y }}
+      animate={controls}
+      className="w-full"
+      style={{ willChange: reduceMotion ? "auto" : "transform, opacity" }}
+    >
       {children}
     </motion.div>
   )
 }
-

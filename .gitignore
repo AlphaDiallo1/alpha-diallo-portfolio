@@ -28,3 +28,4 @@ next-env.d.ts
 
 v0-user-next.config.mjs
 .env
+.next-dev/

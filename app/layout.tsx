@@ -1,32 +1,14 @@
-import type React from "react"
+import type { Metadata } from "next"
+import type { ReactNode } from "react"
+import { Kanit } from "next/font/google"
 import "@/app/globals.css"
-import { Inter } from "next/font/google"
-import { ThemeProvider } from "@/components/theme-provider"
-
-const inter = Inter({ subsets: ["latin"] })
-
-export const metadata = {
-  title: "Alpha Diallo - Software Engineer",
-  description: "Personal portfolio website showcasing my projects and skills",
-    generator: 'v0.dev'
+import "@/app/hero-head.css"
+const kanit = Kanit({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700", "800", "900"], display: "swap", variable: "--font-kanit" })
+export const metadata: Metadata = {
+  title: "Alpha — Software Engineer",
+  description: "Alpha Diallo is a software engineer building responsive web experiences with clean interfaces and thoughtful motion. Explore his projects, skills, and coding journey.",
+  icons: { icon: "/icon.svg" },
 }
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
-  )
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return <html lang="en" className={`dark ${kanit.variable}`}><body>{children}<noscript><style>{`[style*="opacity:0"] { opacity:1 !important; transform:none !important; }`}</style></noscript></body></html>
 }
-
-
-
-import './globals.css'

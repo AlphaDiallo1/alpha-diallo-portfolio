@@ -1,0 +1,14 @@
+.hero .hero-portrait-3d { width:min(48vw,620px); margin-left:max(-24vw,-310px); bottom:30px; height:min(65svh,660px); }
+.hero-head { position:relative; width:100%; height:100%; }
+.head-canvas { position:absolute; inset:0 0 36px; cursor:grab; touch-action:pan-y; outline:none; user-select:none; -webkit-user-select:none; }
+.head-canvas:active { cursor:grabbing; }
+.head-canvas:focus-visible { outline:1px solid #b07ad1; outline-offset:3px; border-radius:45%; }
+.head-canvas canvas { display:block; touch-action:pan-y !important; }
+.hero .head-fallback { position:absolute; width:80%; height:80%; left:10%; top:5%; object-fit:contain; border-radius:35%; filter:none; mask-image:none; opacity:.7; }
+.head-controls { position:absolute; bottom:0; width:100%; display:flex; align-items:center; justify-content:center; gap:10px; z-index:4; }
+.head-controls button { width:32px; height:32px; border-radius:50%; border:1px solid #45434b; display:grid; place-items:center; background:#151417b3; color:#cbd0d8; transition:background .2s; cursor:pointer; }
+.head-controls button:hover { background:#392843; }
+.head-controls button:disabled { opacity:.35; cursor:default; }
+.head-controls p { color:#a5a1ae; font-size:12px; letter-spacing:.07em; }
+@media (max-width:1000px) { .hero .hero-portrait-3d { width:58vw; margin-left:-29vw; height:60svh; bottom:95px; } }
+@media (max-width:640px) { .hero .hero-portrait-3d { width:100%; margin-left:-50%; height:470px; max-height:62svh; bottom:115px; } .head-canvas { inset:0 0 38px; } .head-controls { gap:8px; } }
