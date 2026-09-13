@@ -5,7 +5,7 @@ This update adapts the supplied 3D creator design to Alpha Diallo's existing sof
 ## Design
 
 - Kanit typography, near-black background, metallic headings, and gradient contact buttons.
-- Alpha's supplied GLB head, centered and scaled to fit the hero. Holding and moving the head rotates it horizontally and vertically. There are no visible instructions, captions, or buttons. Keyboard users can focus the head, rotate with arrow keys, and reset with Home.
+- Alpha's supplied GLB head, enlarged and centered in the hero. Holding and moving the head rotates it horizontally and vertically. There are no visible instructions, captions, buttons, or focus ring. Keyboard users can focus the head, rotate with arrow keys, and reset with Home.
 - Two scroll-linked rows of actual project previews.
 - Scroll-revealed introduction and the four supplied decorative 3D assets, saved locally.
 - Five numbered skill groups in the white section, replacing the sample creator's services.
@@ -20,6 +20,7 @@ This update adapts the supplied 3D creator design to Alpha Diallo's existing sof
 - `components/portfolio-motion.tsx`: animation and contact interactions.
 - `components/hero-head.tsx`, `components/head-scene.tsx`, and `app/hero-head.css`: accessible avatar controls, lighting, and responsive placement.
 - `public/models/alpha-face-avatar.glb`: Alpha's supplied `3d+face+avatar.glb`, preserved without changing its geometry or textures. Its bounds determine the centered rotation pivot and display scale.
+- The supplied GLB contains one textured head mesh and one standard material. It does not contain a separate hologram model, alternate scene, or animation.
 - `lib/alpha-head-model.ts` and `public/models/alpha-head.glb`: the earlier procedural reconstruction, retained as source history but no longer loaded by the hero.
 
 ## Run
