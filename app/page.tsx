@@ -15,7 +15,7 @@ export default function Home() {
       <div className="hero-title-wrap"><FadeIn delay={0.15} y={40}><h1 id="hero-title" className="hero-heading">Hi, I&apos;m Alpha</h1></FadeIn></div>
       <div className="hero-role"><span>Alpha Diallo</span><span>Software engineer</span></div>
       <FadeIn className="hero-portrait hero-portrait-3d" delay={0.4}><HeroHead /></FadeIn>
-      <div className="hero-bottom"><FadeIn delay={0.35} className="hero-intro"><p>Clean interfaces.<br />Thoughtful motion.<br />Ideas brought to life.</p><a className="scroll-cue" href="#projects"><ArrowDown size={15} aria-hidden="true" /> Explore my work</a></FadeIn><FadeIn className="hero-cta" delay={0.5}><ContactButton /><p>Based in Staten Island, NY</p></FadeIn></div>
+      <div className="hero-bottom"><FadeIn delay={0.35} className="hero-intro"><p>Meet my digital double.<br />Grab it. Give it a spin.</p><a className="scroll-cue" href="#projects"><ArrowDown size={15} aria-hidden="true" /> Explore my work</a></FadeIn><FadeIn className="hero-cta" delay={0.5}><ContactButton /><p>Based in Staten Island, NY</p></FadeIn></div>
     </section>
     <section className="work-strip" aria-label="Selected project previews"><div className="section-caption"><span>A few things I&apos;ve built</span><span>Scroll to explore / 01—03</span></div><WorkMarquee projects={projects} /></section>
     <section id="about" className="about section-pad" aria-labelledby="about-title">
@@ -35,3 +35,4 @@ export default function Home() {
     <footer><a className="wordmark" href="#top">ALPHA<span>®</span></a><p>© {new Date().getFullYear()} Alpha Diallo. All rights reserved.</p><a className="back-top" href="#top">Back to top <ArrowUpRight size={17} aria-hidden="true" /></a></footer>
   </main>
 }
+
