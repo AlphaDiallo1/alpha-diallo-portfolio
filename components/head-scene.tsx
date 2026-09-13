@@ -17,6 +17,7 @@ function Avatar({ rotation, reduced, onReady }: { rotation: MutableRefObject<Hea
     const normalized = new THREE.Group()
     normalized.add(scene)
     normalized.scale.setScalar(2.8 / Math.max(size.y, 0.001))
+    normalized.position.y = 0.16
     return normalized
   }, [gltf.scene])
   const group = useRef<THREE.Group>(null)

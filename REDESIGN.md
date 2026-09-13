@@ -5,7 +5,7 @@ This update adapts the supplied 3D creator design to Alpha Diallo's existing sof
 ## Design
 
 - Kanit typography, near-black background, metallic headings, and gradient contact buttons.
-- Alpha's supplied GLB head, enlarged and centered in the hero. Holding and moving the head rotates it horizontally and vertically. There are no visible instructions, captions, buttons, or focus ring. Keyboard users can focus the head, rotate with arrow keys, and reset with Home.
+- Alpha's supplied GLB head, enlarged and positioned slightly above the hero's lower controls so the chin stays visible while it floats and rotates. Holding and moving the head rotates it horizontally and vertically. There are no visible instructions, captions, buttons, or focus ring. Keyboard users can focus the head, rotate with arrow keys, and reset with Home.
 - Two scroll-linked rows of actual project previews.
 - Scroll-revealed introduction and the four supplied decorative 3D assets, saved locally.
 - Five numbered skill groups in the white section, replacing the sample creator's services.
