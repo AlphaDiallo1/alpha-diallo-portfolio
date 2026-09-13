@@ -1,13 +1,24 @@
 "use client"
 
-import { Suspense, useEffect, useRef, type MutableRefObject } from "react"
+import { Suspense, useEffect, useMemo, useRef, type MutableRefObject } from "react"
 import { Canvas, useFrame, useLoader } from "@react-three/fiber"
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js"
 import * as THREE from "three"
 
 export type HeadRotation = { x: number; y: number }
 function Avatar({ rotation, reduced, onReady }: { rotation: MutableRefObject<HeadRotation>; reduced: boolean; onReady: () => void }) {
-  const gltf = useLoader(GLTFLoader, "/models/alpha-head.glb")
+  const gltf = useLoader(GLTFLoader, "/models/alpha-face-avatar.glb")
+  const model = useMemo(() => {
+    const scene = gltf.scene.clone(true)
+    const bounds = new THREE.Box3().setFromObject(scene)
+    const center = bounds.getCenter(new THREE.Vector3())
+    const size = bounds.getSize(new THREE.Vector3())
+    scene.position.sub(center)
+    const normalized = new THREE.Group()
+    normalized.add(scene)
+    normalized.scale.setScalar(2.5 / Math.max(size.y, 0.001))
+    return normalized
+  }, [gltf.scene])
   const group = useRef<THREE.Group>(null)
   useEffect(onReady, [onReady])
   useFrame(({ clock }, delta) => {
@@ -17,7 +28,7 @@ function Avatar({ rotation, reduced, onReady }: { rotation: MutableRefObject<Hea
     group.current.rotation.y += (rotation.current.y - group.current.rotation.y) * damping
     group.current.position.y = reduced ? 0 : Math.sin(clock.elapsedTime * 1.15) * 0.045
   })
-  return <group ref={group}><primitive object={gltf.scene} /></group>
+  return <group ref={group}><primitive object={model} /></group>
 }
 
 export default function HeadScene({ rotation, reduced, active, onReady }: { rotation: MutableRefObject<HeadRotation>; reduced: boolean; active: boolean; onReady: () => void }) {

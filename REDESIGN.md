@@ -5,7 +5,7 @@ This update adapts the supplied 3D creator design to Alpha Diallo's existing sof
 ## Design
 
 - Kanit typography, near-black background, metallic headings, and gradient contact buttons.
-- A real, rotatable 3D head reconstructed from Alpha's supplied avatar image. Drag horizontally to see the sides and back, use the rotation buttons, or focus the model and use the arrow keys. Home and the reset button return to the front.
+- Alpha's supplied GLB head, centered and scaled to fit the hero. Holding and moving the head rotates it horizontally and vertically. There are no visible instructions, captions, or buttons. Keyboard users can focus the head, rotate with arrow keys, and reset with Home.
 - Two scroll-linked rows of actual project previews.
 - Scroll-revealed introduction and the four supplied decorative 3D assets, saved locally.
 - Five numbered skill groups in the white section, replacing the sample creator's services.
@@ -19,8 +19,8 @@ This update adapts the supplied 3D creator design to Alpha Diallo's existing sof
 - `app/globals.css`: responsive styling.
 - `components/portfolio-motion.tsx`: animation and contact interactions.
 - `components/hero-head.tsx`, `components/head-scene.tsx`, and `app/hero-head.css`: accessible avatar controls, lighting, and responsive placement.
-- `lib/alpha-head-model.ts`: modeled facial features, wave haircut, and earrings. The side and back shapes are inferred from the front reference.
-- `public/models/alpha-head.glb`: self-contained 3D asset loaded by the hero. The supplied PNG is kept as a loading and WebGL-error fallback.
+- `public/models/alpha-face-avatar.glb`: Alpha's supplied `3d+face+avatar.glb`, preserved without changing its geometry or textures. Its bounds determine the centered rotation pivot and display scale.
+- `lib/alpha-head-model.ts` and `public/models/alpha-head.glb`: the earlier procedural reconstruction, retained as source history but no longer loaded by the hero.
 
 ## Run
 
@@ -38,7 +38,7 @@ pnpm build
 pnpm start
 ```
 
-To regenerate the GLB after editing its model source, use Node.js 22.18+ or 24+ (for native TypeScript stripping):
+To regenerate the earlier procedural reconstruction (not the active hero asset), use Node.js 22.18+ or 24+ (for native TypeScript stripping):
 
 ```sh
 node scripts/export-avatar.mjs
@@ -55,4 +55,4 @@ The original URLs were supplied in the design brief, under `https://shrug-person
 - `p59_1.4659672e.png` → `public/images/orbit.png`
 - `Group_134-1.2e04f3ce.png` → `public/images/chrome.png`
 
-The project previews are the original local portfolio assets. The avatar reference was supplied by Alpha; the generated head is an approximation, not a scan.
+The project previews are the original local portfolio assets. Alpha supplied both the original avatar reference and the active GLB model.
